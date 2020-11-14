@@ -1,0 +1,13 @@
+custom_invoice_bundle:
+    resource: "@CustomInvoiceBundle/Controller"
+    type: annotation
+    prefix: /invoice
+
+custom_invoice_bundle_api:
+    resource: "@CustomInvoiceBundle/Resources/config/oro/routing_api.yml"
+    type: rest
+    prefix: api/rest/{version}
+    requirements:
+        version:  latest|v1
+    defaults:
+        version:  latest

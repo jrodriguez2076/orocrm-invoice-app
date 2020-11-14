@@ -1,0 +1,45 @@
+services:
+    invoice.form.type.file:
+        public: true
+        class: Custom\Bundle\InvoiceBundle\Form\Type\InvoiceFileType
+        tags:
+            - { name: form.type, alias: invoice_file }
+
+    invoice.file_manager.api:
+        public: true
+        class: Custom\Bundle\InvoiceBundle\Model\InvoiceFileApiEntityManager
+        parent: oro_soap.manager.entity_manager.abstract
+        arguments:
+            - Custom\Bundle\InvoiceBundle\Entity\InvoiceFile
+            - "@doctrine.orm.entity_manager"
+
+    invoice.form.type.file.api:
+        public: true
+        class: Custom\Bundle\InvoiceBundle\Form\Type\InvoiceFileApiType
+        tags:
+            - { name: form.type }
+
+    invoice_file.form.handler.entity.api:
+        public: true
+        class: Custom\Bundle\InvoiceBundle\Form\Handler\InvoiceFileHandler
+        arguments:
+            - "@invoice_file.form.entity.api"
+            - "@request_stack"
+            - "@doctrine.orm.entity_manager"
+            - "@event_dispatcher"
+
+    invoice_file.form.entity.api:
+        public: true
+        class: Symfony\Component\Form\Form
+        factory: ['@form.factory', createNamed]
+        arguments:
+            - 'invoice_file'
+            - Custom\Bundle\InvoiceBundle\Form\Type\InvoiceFileApiType
+
+    invoice.auto_assignment.listener:
+        public: true
+        class: Custom\Bundle\InvoiceBundle\Listener\AutoAssignment
+        tags:
+            - { name: doctrine.event_subscriber, connection: default }
+        arguments:
+            - "@service_container"

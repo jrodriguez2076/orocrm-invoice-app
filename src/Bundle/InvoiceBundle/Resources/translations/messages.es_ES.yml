@@ -1,0 +1,14 @@
+oro:
+    invoice:
+        tab: Facturas
+        files: Archivos de Facturas
+        uploaded_at.label: Subido El
+        file.label: Archivo
+        file_name.label: Nombre de Archivo
+        related_contact.label: Contacto Relacionado
+        related_account.label: Cuenta Relacionada
+
+custom:
+    invoice:
+        invoicefile:
+            entity_label: Facturas

@@ -1,0 +1,14 @@
+oro:
+    invoice:
+        tab: Invoice
+        files: Invoice Files
+        uploaded_at.label: Uploaded At
+        file.label: File
+        file_name.label: File Name
+        related_contact.label: Related Contact
+        related_account.label: Related Account
+
+custom:
+    invoice:
+        invoicefile:
+            entity_label: Invoice Files

@@ -4,7 +4,7 @@
     "homepage": "https://github.com/oroinc/crm-application.git",
     "license": "OSL-3.0",
     "autoload": {
-        "psr-4": {"": "src/"},
+        "psr-4": {"Custom\\": "src/"},
         "files": ["src/AppKernel.php"],
         "exclude-from-classmap": ["**/Tests/"]
     },
@@ -22,7 +22,8 @@
         "oro/crm-hangouts-call-bundle": "4.1.*",
         "oro/crm-magento-embedded-contact-us": "4.1.*",
         "oro/crm-dotmailer": "4.1.*",
-        "oro/crm-zendesk": "4.1.*"
+        "oro/crm-zendesk": "4.1.*",
+        "knplabs/knp-gaufrette-bundle": "0.5.2"
     },
     "require-dev": {
         "behat/behat": "3.4.*",

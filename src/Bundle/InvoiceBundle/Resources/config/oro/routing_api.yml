@@ -1,0 +1,3 @@
+invoice_file_api:
+    resource:     "@CustomInvoiceBundle/Controller/Api/Rest/InvoiceFileController.php"
+    type:         rest

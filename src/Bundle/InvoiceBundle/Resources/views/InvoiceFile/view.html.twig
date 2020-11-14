@@ -1,0 +1,76 @@
+{% extends 'OroUIBundle:actions:view.html.twig' %}
+{% import 'OroUIBundle::macros.html.twig' as UI %}
+
+{% block navButtons %}
+    {% import 'OroUIBundle::macros.html.twig' as UI %}
+
+    {% if is_granted('EDIT', entity) %}
+        {{ UI.editButton({
+            'path' : path('invoice_file_update', { id: entity.id }),
+            'entity_label': 'oro.invoice.file.label'|trans
+        }) }}
+    {% endif %}
+    {% if is_granted('DELETE', entity) %}
+        {{ UI.deleteButton({
+            'dataUrl': path('oro_invoice_files_api_delete_file', {'id': entity.id}),
+            'dataRedirect': path('invoice_file_index'),
+            'aCss': 'no-hash remove-button',
+            'id': 'btn-remove-user',
+            'dataId': entity.id,
+            'entity_label': 'oro.invoice.file.label'|trans
+        }) }}
+    {% endif %}
+{% endblock navButtons %}
+
+{% block pageHeader %}
+    {% set breadcrumbs = {
+        'entity': entity,
+        'indexPath': path('invoice_file_index'),
+        'indexLabel': 'oro.invoice.files'|trans,
+        'entityTitle': UI.entityViewLink(entity.relatedContact, entity.relatedContact|oro_format_name, 'oro_contact_view')
+    } %}
+    {{ parent() }}
+{% endblock pageHeader %}
+
+{% block content_data %}
+    {% import 'OroUIBundle::macros.html.twig' as UI %}
+
+    {%- set invoiceFileInformation -%}
+        <div class="row-fluid form-horizontal">
+            <div class="responsive-block">
+                {%- set relatedAccount -%}
+                    {%- if entity.relatedAccount -%}
+                        {% if is_granted('oro_account_view') %}
+                            <a href="{{ path('oro_account_view', {'id': entity.relatedAccount.id}) }}">
+                                {{ UI.renderEntityViewLabel(entity.relatedAccount, 'name', 'oro.account.entity_label') }}
+                            </a>
+                        {% else %}
+                            {{ UI.renderEntityViewLabel(entity.relatedAccount, 'name') }}
+                        {% endif %}
+                    {%- endif -%}
+                {%- endset -%}
+                {{ UI.renderHtmlProperty('oro.case.caseentity.related_account.label'|trans, relatedAccount) }}
+                {{ UI.renderHtmlProperty('oro.invoice.file.label'|trans, oro_file_view(entity.file)) }}
+                {{ UI.renderHtmlProperty(
+                    'oro.invoice.related_contact.label'|trans,
+                    UI.entityViewLink(entity.relatedContact, entity.relatedContact|oro_format_name, 'oro_contact_view')
+                ) }}
+                {% if entity.uploadedAt is not empty %}
+                    {{ UI.renderProperty('oro.invoice.uploaded_at.label'|trans, entity.uploadedAt|oro_format_datetime) }}
+                {% endif %}
+    {%- endset -%}
+
+    {% set dataBlocks = [
+        {
+            'title': 'General'|trans,
+            'subblocks': [
+            {'data' : [invoiceFileInformation]}
+        ]
+        }
+    ] %}
+
+    {% set id = 'invoice-file-view' %}
+    {% set data = { 'dataBlocks': dataBlocks } %}
+
+    {{ parent() }}
+{% endblock content_data %}

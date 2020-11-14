@@ -51,3 +51,18 @@ monolog:
             id:             oro_message_queue.log.handler.console_error
             handler:        nested
             level:          debug
+
+knp_gaufrette:
+    adapters:
+        attachments:
+            local:
+                directory: ../public/attachments
+                create: true
+
+    filesystems:
+        attachments:
+            adapter:    attachments
+            alias:      attachments_filesystem
+        mediacache:
+            adapter:    mediacache
+            alias:      mediacache_filesystem

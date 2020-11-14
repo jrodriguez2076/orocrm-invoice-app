@@ -1,0 +1,2 @@
+bundles:
+    - { name: Custom\Bundle\ContactBundle\CustomContactBundle, priority: 500 }

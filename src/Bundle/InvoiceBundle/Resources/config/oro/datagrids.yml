@@ -1,0 +1,91 @@
+datagrids:
+    invoice-files-grid:
+        source:
+            acl_resource: invoice.file_view
+            type: orm
+            query:
+                select:
+                    - invoiceFile.id
+                    - file.originalFilename as fileName
+                    - relatedAccount.name as relatedAccountName
+                    - CONCAT_WS(' ', contact.firstName, contact.lastName) as contactName
+                    - contact.id as contactId
+                    - invoiceFile.uploadedAt as uploadedAt
+                from:
+                    - { table: 'Custom\Bundle\InvoiceBundle\Entity\InvoiceFile', alias: invoiceFile }
+                join:
+                    left:
+                        - { join: invoiceFile.relatedAccount, alias: relatedAccount }
+                        - { join: invoiceFile.relatedContact, alias: contact }
+                        - { join: invoiceFile.file, alias: file }
+        columns:
+            fileName:
+                label: oro.invoice.file_name.label
+            relatedAccountName:
+                label: oro.invoice.related_account.label
+            contactName:
+                type: twig
+                label: oro.invoice.related_contact.label
+                frontend_type: html
+                template: CustomInvoiceBundle:InvoiceFile:Datagrid/Property/contact.html.twig
+            uploadedAt:
+                inline_editing:
+                    enable: false
+                label: oro.invoice.uploaded_at.label
+                frontend_type: datetime
+        sorters:
+            columns:
+                relatedAccountName:
+                    data_name: relatedAccountName
+                contactName:
+                    data_name: contactName
+                uploadedAt:
+                    data_name: invoiceFile.uploadedAt
+        filters:
+            columns:
+                fileName:
+                    type: string
+                    data_name: fileName
+                relatedAccountName:
+                    type: string
+                    data_name: relatedAccountName
+                contactName:
+                    type: string
+                    data_name: contactName
+                uploadedAt:
+                    type: datetime
+                    data_name: invoiceFile.uploadedAt
+        properties:
+            id: ~
+            view_link:
+                type:         url
+                route:        invoice_file_view
+                params:       [ id ]
+            update_link:
+                type:         url
+                route:        invoice_file_update
+                params:       [ id ]
+            delete_link:
+                type:         url
+                route:        oro_invoice_files_api_delete_file
+                params:       [ id ]
+        actions:
+            view:
+                type:         navigate
+                acl_resource: invoice.file_view
+                label:        oro.grid.action.view
+                icon:         eye
+                link:         view_link
+                rowAction:    true
+            update:
+                type:         navigate
+                acl_resource: invoice.file_update
+                label:        oro.grid.action.update
+                icon:         edit
+                link:         update_link
+            delete:
+                type:         delete
+                acl_resource: invoice.file_delete
+                label:        oro.grid.action.delete
+                icon:         trash
+                link:         delete_link

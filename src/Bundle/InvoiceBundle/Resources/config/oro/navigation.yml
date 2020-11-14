@@ -1,0 +1,19 @@
+navigation:
+    menu_config:
+        items:
+            invoice_tab:
+                label: 'oro.invoice.tab'
+                uri: '#'
+                extras:
+                    position: 30
+                    icon: fa-book
+            invoice_files:
+                label: 'oro.invoice.files'
+                route: invoice_file_index
+
+        tree:
+            application_menu:
+                children:
+                    invoice_tab:
+                        children:
+                            invoice_files: ~
