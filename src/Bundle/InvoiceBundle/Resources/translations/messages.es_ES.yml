@@ -1,9 +1,9 @@
 oro:
     invoice:
-        tab: Facturas
-        files: Archivos de Facturas
-        categories: Categorías de Facturas
-        subcategories: Subcategorías de Facturas
+        tab: Documentos
+        files: Listado de Documentos
+        categories: Categorías de Documentos
+        subcategories: Subcategorías de Documentos
         category.label: Categoría
         subcategory.label: Subcategoría
         uploaded_at.label: Subido El

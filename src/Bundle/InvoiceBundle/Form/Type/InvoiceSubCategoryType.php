@@ -35,6 +35,8 @@ class InvoiceSubCategoryType extends AbstractType
                 'class' => InvoiceCategory::class,
                 'choice_label' => 'name',
                 'constraints' => new NotBlank(),
+                'placeholder' => 'oro.invoice.select_option.label',
+                'empty_data' => null,
                 'configs' => [
                     'allowClear' => false,
                     'openOnEnter' => true,
