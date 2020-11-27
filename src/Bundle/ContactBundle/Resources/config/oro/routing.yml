@@ -1,8 +1,3 @@
-custom_user_bundle:
-    resource: "@CustomContactBundle/Controller"
-    type: annotation
-    prefix: /contact
-
 custom_user_email_api:
     resource: "@CustomContactBundle/Controller/Api/Rest/ContactEmailController.php"
     type: rest
@@ -12,3 +7,8 @@ custom_user_email_api:
         _format: json
     defaults:
         version: latest
+
+custom_contact_bundle:
+    resource: "@CustomContactBundle/Controller"
+    type: annotation
+    prefix: /contact

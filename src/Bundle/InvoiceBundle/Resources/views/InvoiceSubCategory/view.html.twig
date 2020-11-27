@@ -1,0 +1,66 @@
+{% extends 'OroUIBundle:actions:view.html.twig' %}
+{% import 'OroUIBundle::macros.html.twig' as UI %}
+
+{% block navButtons %}
+    {% import 'OroUIBundle::macros.html.twig' as UI %}
+
+    {% if is_granted('EDIT', entity) %}
+        {{ UI.editButton({
+            'path' : path('invoice_subcategory_update', { id: entity.id }),
+            'entity_label': 'oro.invoice.subcategory.label'|trans
+        }) }}
+    {% endif %}
+    {% if is_granted('DELETE', entity) %}
+        {{ UI.deleteButton({
+            'dataUrl': path('oro_invoice_subcategories_api_delete_subcategory', {'id': entity.id}),
+            'dataRedirect': path('invoice_subcategory_index'),
+            'aCss': 'no-hash remove-button',
+            'id': 'btn-remove-user',
+            'dataId': entity.id,
+            'entity_label': 'oro.invoice.subcategory.label'|trans
+        }) }}
+    {% endif %}
+    {% if is_granted('invoice.subcategory_create') %}
+        <div class="btn-group">
+            {{ UI.addButton({
+                'path': path('invoice_subcategory_create'),
+                'entity_label': 'oro.invoice.subcategory.label'|trans
+            }) }}
+        </div>
+    {% endif %}
+{% endblock navButtons %}
+
+{% block pageHeader %}
+    {% set breadcrumbs = {
+        'entity': entity,
+        'indexPath': path('invoice_subcategory_index'),
+        'indexLabel': 'oro.invoice.subcategories'|trans,
+        'entityTitle': entity.name
+    } %}
+    {{ parent() }}
+{% endblock pageHeader %}
+
+{% block content_data %}
+    {% import 'OroUIBundle::macros.html.twig' as UI %}
+
+    {%- set invoiceSubCategoryInformation -%}
+        <div class="row-fluid form-horizontal">
+            <div class="responsive-block">
+                {{ UI.renderHtmlProperty('oro.invoice.subcategory.name.label'|trans, entity.name) }}
+                {{ UI.renderHtmlProperty('oro.invoice.subcategory.category.label'|trans, entity.category.name) }}
+    {%- endset -%}
+
+    {% set dataBlocks = [
+        {
+            'title': 'General'|trans,
+            'subblocks': [
+            {'data' : [invoiceSubCategoryInformation]}
+        ]
+        }
+    ] %}
+
+    {% set id = 'invoice-subcategory-view' %}
+    {% set data = { 'dataBlocks': dataBlocks } %}
+
+    {{ parent() }}
+{% endblock content_data %}

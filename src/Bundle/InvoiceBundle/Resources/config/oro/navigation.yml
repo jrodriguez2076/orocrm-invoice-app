@@ -10,6 +10,12 @@ navigation:
             invoice_files:
                 label: 'oro.invoice.files'
                 route: invoice_file_index
+            invoice_categories:
+                label: 'oro.invoice.categories'
+                route: invoice_category_index
+            invoice_subcategories:
+                label: 'oro.invoice.subcategories'
+                route: invoice_subcategory_index
 
         tree:
             application_menu:
@@ -17,3 +23,5 @@ navigation:
                     invoice_tab:
                         children:
                             invoice_files: ~
+                            invoice_categories: ~
+                            invoice_subcategories: ~

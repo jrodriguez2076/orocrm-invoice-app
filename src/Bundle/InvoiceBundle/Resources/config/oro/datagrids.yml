@@ -10,6 +10,8 @@ datagrids:
                     - relatedAccount.name as relatedAccountName
                     - CONCAT_WS(' ', contact.firstName, contact.lastName) as contactName
                     - contact.id as contactId
+                    - category.name as categoryName
+                    - parentCategory.name as parentCategoryName
                     - invoiceFile.uploadedAt as uploadedAt
                 from:
                     - { table: 'Custom\Bundle\InvoiceBundle\Entity\InvoiceFile', alias: invoiceFile }
@@ -18,9 +20,15 @@ datagrids:
                         - { join: invoiceFile.relatedAccount, alias: relatedAccount }
                         - { join: invoiceFile.relatedContact, alias: contact }
                         - { join: invoiceFile.file, alias: file }
+                        - { join: invoiceFile.category, alias: category }
+                        - { join: category.category, alias: parentCategory }
         columns:
             fileName:
                 label: oro.invoice.file_name.label
+            parentCategoryName:
+                label: oro.invoice.subcategory.category.label
+            categoryName:
+                label: oro.invoice.subcategory.label
             relatedAccountName:
                 label: oro.invoice.related_account.label
             contactName:
@@ -37,6 +45,10 @@ datagrids:
             columns:
                 relatedAccountName:
                     data_name: relatedAccountName
+                categoryName:
+                    data_name: categoryName
+                parentCategoryName:
+                    data_name: parentCategoryName
                 contactName:
                     data_name: contactName
                 uploadedAt:
@@ -46,6 +58,12 @@ datagrids:
                 fileName:
                     type: string
                     data_name: fileName
+                categoryName:
+                    type: string
+                    data_name: categoryName
+                parentCategoryName:
+                    type: string
+                    data_name: parentCategoryName
                 relatedAccountName:
                     type: string
                     data_name: relatedAccountName
@@ -86,6 +104,131 @@ datagrids:
             delete:
                 type:         delete
                 acl_resource: invoice.file_delete
+                label:        oro.grid.action.delete
+                icon:         trash
+                link:         delete_link
+
+    invoice-subcategories-grid:
+        source:
+            acl_resource: invoice.subcategories_view
+            type: orm
+            query:
+                select:
+                    - invoiceSubCategory.id
+                    - invoiceSubCategory.name as invoiceSubCategoryName
+                    - invoiceCategory.name as invoiceCategoryName
+                from:
+                    - { table: 'Custom\Bundle\InvoiceBundle\Entity\InvoiceSubCategory', alias: invoiceSubCategory }
+                join:
+                    left:
+                        - { join: invoiceSubCategory.category, alias: invoiceCategory }
+        columns:
+            invoiceSubCategoryName:
+                label: oro.invoice.subcategory.name.label
+            invoiceCategoryName:
+                label: oro.invoice.subcategory.category.label
+        sorters:
+            columns:
+                invoiceSubCategoryName:
+                    data_name: invoiceSubCategoryName
+                invoiceCategoryName:
+                    data_name: invoiceCategoryName
+        filters:
+            columns:
+                invoiceSubCategoryName:
+                    type: string
+                    data_name: invoiceSubCategoryName
+                invoiceCategoryName:
+                    type: string
+                    data_name: invoiceCategoryName
+        properties:
+            id: ~
+            view_link:
+                type:         url
+                route:        invoice_subcategory_view
+                params:       [ id ]
+            update_link:
+                type:         url
+                route:        invoice_subcategory_update
+                params:       [ id ]
+            delete_link:
+                type:         url
+                route:        oro_invoice_subcategories_api_delete_subcategory
+                params:       [ id ]
+        actions:
+            view:
+                type:         navigate
+                acl_resource: invoice.subcategory_view
+                label:        oro.grid.action.view
+                icon:         eye
+                link:         view_link
+                rowAction:    true
+            update:
+                type:         navigate
+                acl_resource: invoice.subcategory_update
+                label:        oro.grid.action.update
+                icon:         edit
+                link:         update_link
+            delete:
+                type:         delete
+                acl_resource: invoice.subcategory_delete
+                label:        oro.grid.action.delete
+                icon:         trash
+                link:         delete_link
+
+    invoice-categories-grid:
+        source:
+            acl_resource: invoice.categories_view
+            type: orm
+            query:
+                select:
+                    - invoiceCategory.id
+                    - invoiceCategory.name as invoiceCategoryName
+                from:
+                    - { table: 'Custom\Bundle\InvoiceBundle\Entity\InvoiceCategory', alias: invoiceCategory }
+        columns:
+            invoiceCategoryName:
+                label: oro.invoice.category.name.label
+        sorters:
+            columns:
+                invoiceCategoryName:
+                    data_name: invoiceCategoryName
+        filters:
+            columns:
+                invoiceCategoryName:
+                    type: string
+                    data_name: invoiceCategoryName
+        properties:
+            id: ~
+            view_link:
+                type:         url
+                route:        invoice_category_view
+                params:       [ id ]
+            update_link:
+                type:         url
+                route:        invoice_category_update
+                params:       [ id ]
+            delete_link:
+                type:         url
+                route:        oro_invoice_categories_api_delete_category
+                params:       [ id ]
+        actions:
+            view:
+                type:         navigate
+                acl_resource: invoice.category_view
+                label:        oro.grid.action.view
+                icon:         eye
+                link:         view_link
+                rowAction:    true
+            update:
+                type:         navigate
+                acl_resource: invoice.category_update
+                label:        oro.grid.action.update
+                icon:         edit
+                link:         update_link
+            delete:
+                type:         delete
+                acl_resource: invoice.category_delete
                 label:        oro.grid.action.delete
                 icon:         trash
                 link:         delete_link

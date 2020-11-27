@@ -38,6 +38,7 @@
     {%- set invoiceFileInformation -%}
         <div class="row-fluid form-horizontal">
             <div class="responsive-block">
+                {{ UI.renderHtmlProperty('oro.invoice.category.label'|trans, entity.category.name) }}
                 {%- set relatedAccount -%}
                     {%- if entity.relatedAccount -%}
                         {% if is_granted('oro_account_view') %}

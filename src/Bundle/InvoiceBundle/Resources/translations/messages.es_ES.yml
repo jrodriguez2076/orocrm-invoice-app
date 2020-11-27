@@ -2,11 +2,21 @@ oro:
     invoice:
         tab: Facturas
         files: Archivos de Facturas
+        categories: Categorías de Facturas
+        subcategories: Subcategorías de Facturas
+        category.label: Categoría
+        subcategory.label: Subcategoría
         uploaded_at.label: Subido El
         file.label: Archivo
         file_name.label: Nombre de Archivo
         related_contact.label: Contacto Relacionado
         related_account.label: Cuenta Relacionada
+        category:
+            name.label: Nombre
+        subcategory:
+            name.label: Nombre
+            category.label: Categoria Asociada
+        select_option.label: Selecciona una opción
 
 custom:
     invoice:

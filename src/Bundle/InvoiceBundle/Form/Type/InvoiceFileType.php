@@ -5,9 +5,11 @@ declare(strict_types=1);
 namespace Custom\Bundle\InvoiceBundle\Form\Type;
 
 use Custom\Bundle\InvoiceBundle\Entity\InvoiceFile;
+use Custom\Bundle\InvoiceBundle\Form\DataTransformer\idToCategoryTransformer;
 use Oro\Bundle\AttachmentBundle\Form\Type\FileType;
 use Oro\Bundle\ContactBundle\Form\Type\ContactSelectType;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Validator\Constraints\NotBlank;
@@ -28,6 +30,19 @@ class InvoiceFileType extends AbstractType
                 ]
             )
             ->add(
+                'category',
+                ChoiceType::class,
+                [
+                    'required' => true,
+                    'placeholder' => 'oro.invoice.select_option.label',
+                    'choices' => $options['categories'],
+                    'label' => 'oro.invoice.category.label',
+                    'constraints' => new NotBlank(),
+                    'empty_data' => null,
+                    'is_dynamic_field' => true,
+                ]
+            )
+            ->add(
                 'relatedContact',
                 ContactSelectType::class,
                 [
@@ -42,13 +57,22 @@ class InvoiceFileType extends AbstractType
                     ]
                 ]
             );
+
+        if ($options['api'] === false) {
+            $builder->get('category')->addModelTransformer(new idToCategoryTransformer($options['entityManager']));
+        }
     }
 
     public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([
             'data_class' => InvoiceFile::class,
+            'categories' => null,
+            'entityManager' => null,
+            'api' => true,
         ]);
+
+        $resolver->setRequired('categories');
     }
 
     public function getName()

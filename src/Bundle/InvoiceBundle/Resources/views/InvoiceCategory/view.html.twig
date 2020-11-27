@@ -1,0 +1,65 @@
+{% extends 'OroUIBundle:actions:view.html.twig' %}
+{% import 'OroUIBundle::macros.html.twig' as UI %}
+
+{% block navButtons %}
+    {% import 'OroUIBundle::macros.html.twig' as UI %}
+
+    {% if is_granted('EDIT', entity) %}
+        {{ UI.editButton({
+            'path' : path('invoice_category_update', { id: entity.id }),
+            'entity_label': 'oro.invoice.category.label'|trans
+        }) }}
+    {% endif %}
+    {% if is_granted('DELETE', entity) %}
+        {{ UI.deleteButton({
+            'dataUrl': path('oro_invoice_categories_api_delete_category', {'id': entity.id}),
+            'dataRedirect': path('invoice_category_index'),
+            'aCss': 'no-hash remove-button',
+            'id': 'btn-remove-user',
+            'dataId': entity.id,
+            'entity_label': 'oro.invoice.category.label'|trans
+        }) }}
+    {% endif %}
+    {% if is_granted('invoice.category_create') %}
+        <div class="btn-group">
+            {{ UI.addButton({
+                'path': path('invoice_category_create'),
+                'entity_label': 'oro.invoice.category.label'|trans
+            }) }}
+        </div>
+    {% endif %}
+{% endblock navButtons %}
+
+{% block pageHeader %}
+    {% set breadcrumbs = {
+        'entity': entity,
+        'indexPath': path('invoice_category_index'),
+        'indexLabel': 'oro.invoice.categories'|trans,
+        'entityTitle': entity.name
+    } %}
+    {{ parent() }}
+{% endblock pageHeader %}
+
+{% block content_data %}
+    {% import 'OroUIBundle::macros.html.twig' as UI %}
+
+    {%- set invoiceCategoryInformation -%}
+        <div class="row-fluid form-horizontal">
+            <div class="responsive-block">
+                {{ UI.renderHtmlProperty('oro.invoice.category.name.label'|trans, entity.name) }}
+    {%- endset -%}
+
+    {% set dataBlocks = [
+        {
+            'title': 'General'|trans,
+            'subblocks': [
+            {'data' : [invoiceCategoryInformation]}
+        ]
+        }
+    ] %}
+
+    {% set id = 'invoice-category-view' %}
+    {% set data = { 'dataBlocks': dataBlocks } %}
+
+    {{ parent() }}
+{% endblock content_data %}

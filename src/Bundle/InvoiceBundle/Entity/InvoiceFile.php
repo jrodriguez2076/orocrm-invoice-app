@@ -17,7 +17,7 @@ use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\ConfigField;
  * @ORM\Entity
  * @Config(
  *      routeName="invoice_file_index",
- *      routeView="invoice_file_view    ",
+ *      routeView="invoice_file_view",
  *      defaultValues={
  *          "dataaudit"={
  *              "auditable"=false
@@ -46,6 +46,14 @@ class InvoiceFile
     protected $id;
 
     /**
+     * @ORM\ManyToOne(targetEntity="Custom\Bundle\InvoiceBundle\Entity\InvoiceSubCategory")
+     * @ORM\JoinColumn(name="category_id", referencedColumnName="id", onDelete="SET NULL")
+     *
+     * @var InvoiceSubCategory
+     */
+    protected $category;
+
+    /**
      * @var File
      *
      * @ORM\ManyToOne(targetEntity="Oro\Bundle\AttachmentBundle\Entity\File", cascade={"persist"})
@@ -55,7 +63,7 @@ class InvoiceFile
     public $file;
 
     /**
-         * @ORM\ManyToOne(targetEntity="Oro\Bundle\AccountBundle\Entity\Account")
+     * @ORM\ManyToOne(targetEntity="Oro\Bundle\AccountBundle\Entity\Account")
      * @ORM\JoinColumn(name="relatedAccount_id", referencedColumnName="id", onDelete="SET NULL")
      *
      * @var Account
@@ -92,6 +100,16 @@ class InvoiceFile
     public function setId(int $id): void
     {
         $this->id = $id;
+    }
+
+    public function getCategory(): ?InvoiceSubCategory
+    {
+        return $this->category;
+    }
+
+    public function setCategory(InvoiceSubCategory $category): void
+    {
+        $this->category = $category;
     }
 
     public function getRelatedAccount(): ?Account

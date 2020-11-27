@@ -2,8 +2,22 @@ services:
     invoice.form.type.file:
         public: true
         class: Custom\Bundle\InvoiceBundle\Form\Type\InvoiceFileType
+        arguments:
+            - "@invoice.tranformer.category_data_transformer"
         tags:
             - { name: form.type, alias: invoice_file }
+
+    invoice.form.type.category:
+        public: true
+        class: Custom\Bundle\InvoiceBundle\Form\Type\InvoiceCategoryType
+        tags:
+            - { name: form.type, alias: invoice_category }
+
+    invoice.form.type.subcategory:
+        public: true
+        class: Custom\Bundle\InvoiceBundle\Form\Type\InvoiceSubCategoryType
+        tags:
+            - { name: form.type, alias: invoice_subcategory }
 
     invoice.file_manager.api:
         public: true
@@ -11,6 +25,22 @@ services:
         parent: oro_soap.manager.entity_manager.abstract
         arguments:
             - Custom\Bundle\InvoiceBundle\Entity\InvoiceFile
+            - "@doctrine.orm.entity_manager"
+
+    invoice.category_manager.api:
+        public: true
+        class: Custom\Bundle\InvoiceBundle\Model\InvoiceCategoryApiEntityManager
+        parent: oro_soap.manager.entity_manager.abstract
+        arguments:
+            - Custom\Bundle\InvoiceBundle\Entity\InvoiceCategory
+            - "@doctrine.orm.entity_manager"
+
+    invoice.subcategory_manager.api:
+        public: true
+        class: Custom\Bundle\InvoiceBundle\Model\InvoiceSubCategoryApiEntityManager
+        parent: oro_soap.manager.entity_manager.abstract
+        arguments:
+            - Custom\Bundle\InvoiceBundle\Entity\InvoiceSubCategory
             - "@doctrine.orm.entity_manager"
 
     invoice.form.type.file.api:
@@ -22,6 +52,15 @@ services:
     invoice_file.form.handler.entity.api:
         public: true
         class: Custom\Bundle\InvoiceBundle\Form\Handler\InvoiceFileHandler
+        arguments:
+            - "@invoice_file.form.entity.api"
+            - "@request_stack"
+            - "@doctrine.orm.entity_manager"
+            - "@event_dispatcher"
+
+    invoice_category.form.handler.entity.api:
+        public: true
+        class: Custom\Bundle\InvoiceBundle\Form\Handler\InvoiceCategoryHandler
         arguments:
             - "@invoice_file.form.entity.api"
             - "@request_stack"
@@ -43,3 +82,15 @@ services:
             - { name: doctrine.event_subscriber, connection: default }
         arguments:
             - "@service_container"
+
+    invoice.provider.categories:
+        public: true
+        class: Custom\Bundle\InvoiceBundle\Entity\Repository\InvoiceCategory
+        arguments:
+            - "@doctrine.orm.entity_manager"
+
+    invoice.tranformer.category_data_transformer:
+        public: true
+        class: Custom\Bundle\InvoiceBundle\Form\DataTransformer\idToCategoryTransformer
+        arguments:
+            - "@doctrine.orm.entity_manager"

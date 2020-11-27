@@ -1,0 +1,92 @@
+{% import 'OroUIBundle::macros.html.twig' as ui %}
+{% import 'OroEntityConfigBundle::macros.html.twig' as entityConfig %}
+{% import 'OroUserBundle::macros.html.twig' as U %}
+{% import _self as contactInfo %}
+
+{% macro renderCollectionWithPrimaryElement(collection, isEmail, entity) %}
+    {% import 'OroUIBundle::macros.html.twig' as ui %}
+    {% import 'OroEmailBundle::macros.html.twig' as email %}
+
+    {% set primaryElement = null %}
+    {% set elements = [] %}
+
+    {% for element in collection %}
+        {% if element.primary %}
+            {% set primaryElement = element %}
+        {% else %}
+            {% set elements = elements|merge([element]) %}
+        {% endif %}
+    {% endfor %}
+    {% if primaryElement %}
+        {% set elements = [primaryElement]|merge(elements) %}
+    {% endif %}
+
+    <ul class="extra-list">
+        {%- for element in elements %}
+            <li class="contact-collection-element{% if element.primary %} primary{% endif %}">
+                {% if isEmail %}
+                    {{ email.renderEmailWithActions(element, entity) }}
+                {% else %}
+                    {{ ui.renderPhoneWithActions(element, entity) }}
+                {% endif %}
+            </li>
+        {% endfor -%}
+    </ul>
+{% endmacro %}
+
+{%- macro getSocialUrl(type, value) -%}
+    {% if value|slice(0, 5) == 'http:' or value|slice(0, 6) == 'https:' %}
+        {{ value }}
+    {% else %}
+        {{ oro_social_url(type, value) }}
+    {% endif %}
+{%- endmacro -%}
+
+<div class="widget-content">
+    <div class="row-fluid form-horizontal contact-info">
+        <div class="responsive-block">
+            {{ ui.renderHtmlProperty('oro.contact.id_document.label'|trans, entity.idDocument) }}
+            {{ ui.renderSwitchableHtmlProperty('oro.contact.description.label'|trans, entity.description) }}
+            {{ ui.renderHtmlProperty('oro.contact.phones.label'|trans, entity.phones.count ? contactInfo.renderCollectionWithPrimaryElement(entity.phones, false, entity) : null) }}
+            {{ ui.renderHtmlProperty('oro.contact.emails.label'|trans, entity.emails.count ? contactInfo.renderCollectionWithPrimaryElement(entity.emails, true, entity) : null) }}
+            {{ ui.renderProperty('oro.contact.method.label'|trans, entity.method) }}
+
+            {{ entityConfig.renderDynamicFields(entity) }}
+        </div>
+
+        <div class="responsive-block">
+            {%- set accountsData -%}
+                {%- if entity.accounts.count -%}
+                    {% set accountViewGranted = is_granted('oro_account_view') %}
+                    {%- for account in entity.accounts -%}
+                        {%- if accountViewGranted -%}
+                            <a href="{{ path('oro_account_view', {'id': account.id}) }}">{{ ui.renderEntityViewLabel(account, 'name', 'oro.account.entity_label') }}</a>
+                        {%- else -%}
+                            {{ ui.renderEntityViewLabel(account, 'name') }}
+                        {%- endif -%}
+                        {% if not loop.last %}, {% endif %}
+                    {%- endfor -%}
+                {%- endif -%}
+            {%- endset -%}
+
+            {%- set assignedToData -%}
+                {%- if entity.assignedTo -%}
+                    {{ U.render_user_name(entity.assignedTo) }}
+                    {{ U.user_business_unit_name(entity.assignedTo) }}
+                {%- endif -%}
+            {%- endset -%}
+
+            {{ ui.renderProperty('oro.contact.job_title.label'|trans, entity.jobTitle) }}
+            {{ ui.renderHtmlProperty('oro.contact.accounts.label'|trans, accountsData) }}
+            {{ ui.renderProperty('oro.contact.birthday.label'|trans, ui.render_birthday(entity.birthday)) }}
+            {{ ui.renderProperty('oro.contact.gender.label'|trans, oro_gender(entity.gender)) }}
+            {{ ui.renderProperty('oro.contact.source.label'|trans, entity.source) }}
+            {{ ui.renderHtmlProperty('oro.contact.assigned_to.label'|trans, assignedToData) }}
+            {{ ui.renderHtmlProperty(
+                'oro.contact.reports_to.label'|trans,
+                ui.entityViewLink(entity.reportsTo, entity.reportsTo|oro_format_name, 'oro_contact_view')
+            ) }}
+            {{ ui.renderProperty('oro.contact.groups.label'|trans, entity.groups.count ? entity.groupLabels|join(', ') : null) }}
+        </div>
+    </div>
+</div>

@@ -84,11 +84,15 @@ class InvoiceFileController extends AbstractController
 
     private function update(InvoiceFile $invoiceFile, Request $request)
     {
-        $form = $this->get('form.factory')->create(InvoiceFileType::class, $invoiceFile);
+        $entityManager = $this->getDoctrine()->getManager();
+        $categoryList = $this->get('invoice.provider.categories')->getInvoiceCategories();
+        foreach ($categoryList as $row) {
+            $categories[$row['category']][$row['name']] = $row['id'];
+        }
+        $form = $this->get('form.factory')->create(InvoiceFileType::class, $invoiceFile, ['categories' => $categories, 'entityManager' => $entityManager, 'api' => false]);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $entityManager = $this->getDoctrine()->getManager();
             $entityManager->persist($invoiceFile);
             $entityManager->flush();
 

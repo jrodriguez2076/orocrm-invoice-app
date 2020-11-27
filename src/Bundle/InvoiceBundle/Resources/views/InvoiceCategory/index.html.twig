@@ -1,0 +1,15 @@
+{% extends 'OroUIBundle:actions:index.html.twig' %}
+{% import 'OroUIBundle::macros.html.twig' as UI %}
+{% import 'OroDataGridBundle::macros.html.twig' as dataGrid %}
+{% set pageTitle = 'oro.invoice.categories'|trans %}
+
+{% block navButtons %}
+    {% if is_granted('invoice.category_create') %}
+        <div class="btn-group">
+            {{ UI.addButton({
+                'path': path('invoice_category_create'),
+                'entity_label': 'oro.invoice.category.label'|trans
+            }) }}
+        </div>
+    {% endif %}
+{% endblock %}

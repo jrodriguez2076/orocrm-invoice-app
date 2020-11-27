@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Custom\Bundle\InvoiceBundle\Form\Type;
 
-use Oro\Bundle\FormBundle\Form\Type\OroDateTimeType;
 use Oro\Bundle\SoapBundle\Form\EventListener\PatchSubscriber;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;

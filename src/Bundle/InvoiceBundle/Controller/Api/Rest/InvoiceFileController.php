@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Custom\Bundle\InvoiceBundle\Controller\Api\Rest;
 
+use Custom\Bundle\InvoiceBundle\Entity\InvoiceSubCategory;
+use DateTime;
 use Custom\Bundle\InvoiceBundle\Entity\InvoiceFile;
 use FOS\RestBundle\Controller\Annotations as Rest;
 use FOS\RestBundle\Controller\Annotations\RouteResource;
@@ -13,6 +15,7 @@ use Oro\Bundle\AttachmentBundle\Entity\File;
 use Oro\Bundle\ContactBundle\Entity\Contact;
 use Oro\Bundle\SecurityBundle\Annotation\AclAncestor;
 use Oro\Bundle\SoapBundle\Controller\Api\Rest\RestController;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -30,14 +33,15 @@ class InvoiceFileController extends RestController implements ClassResourceInter
      */
     public function postAction(Request $request)
     {
-        $response = $this->handleCreateRequest();
         $entityManager = $this->get('doctrine.orm.entity_manager');
-        $invoiceFileId = json_decode($response->getContent(), true)['id'];
-        $invoiceFileEntity = $entityManager->getRepository(InvoiceFile::class)->findOneBy(['id' => $invoiceFileId]);
-
         $relatedContactId = $request->get('file')['relatedContact'];
         $relatedContact = $entityManager->getRepository(Contact::class)->findOneBy(['id' => $relatedContactId]);
+        $categoryId = $request->get('file')['category'];
+        $category = $entityManager->getRepository(InvoiceSubCategory::class)->findOneBy(['id' => $categoryId]);
+        $invoiceFileEntity = new InvoiceFile();
         $invoiceFileEntity->setRelatedContact($relatedContact);
+        $invoiceFileEntity->setCategory($category);
+        $invoiceFileEntity->setUploadedAt(new DateTime());
 
         $uploadedFile = $request->files->all()['file']['file']['content'];
 
@@ -55,7 +59,7 @@ class InvoiceFileController extends RestController implements ClassResourceInter
         $entityManager->persist($invoiceFileEntity);
         $entityManager->flush();
 
-        return $response;
+        return new JsonResponse([$invoiceFileEntity->getId()], 201);
     }
 
     /**
@@ -107,6 +111,7 @@ class InvoiceFileController extends RestController implements ClassResourceInter
         switch ($field) {
             case 'relatedAccount':
             case 'relatedContact':
+            case 'category':
                 if ($value) {
                     $value = $value->getId();
                 }

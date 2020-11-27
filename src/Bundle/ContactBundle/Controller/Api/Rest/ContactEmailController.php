@@ -50,6 +50,32 @@ class ContactEmailController extends RestController
         return $response = new JsonResponse($contact);
     }
 
+    public function cgetAction(): JsonResponse
+    {
+        $query = <<<SQL
+SELECT 
+	`contact`.`id` AS `id`,
+	`contactEmail`.`email` AS `email`,
+	CONCAT_WS(' ', `contact`.`first_name`, `contact`.`last_name`) as contactName
+FROM 
+	`orocrm_contact` `contact`
+LEFT JOIN
+    `orocrm_contact_email` `contactEmail` ON `contactEmail`.`owner_id` = `contact`.`id`
+ORDER BY
+    `contact`.`email` DESC
+SQL;
+        $entityManager = $this->get('doctrine.orm.entity_manager');
+
+        $contacts = $entityManager->getConnection()->fetchAll($query);
+        $formattedContacts = [];
+
+        foreach ($contacts as $contact) {
+            $formattedContacts[sprintf('%s / %s', $contact['email'], $contact['contactName'])] = $contact['email'];
+        }
+
+        return $response = new JsonResponse($formattedContacts);
+    }
+
     protected function getContactEmail(string $email, EntityManager $entityManager): ?ContactEmail
     {
         /** @var QueryBuilder $queryBuilder */

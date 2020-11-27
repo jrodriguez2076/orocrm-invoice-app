@@ -1,3 +1,11 @@
 invoice_file_api:
     resource:     "@CustomInvoiceBundle/Controller/Api/Rest/InvoiceFileController.php"
     type:         rest
+
+invoice_category_api:
+    resource:     "@CustomInvoiceBundle/Controller/Api/Rest/InvoiceCategoryController.php"
+    type:         rest
+
+invoice_subcategory_api:
+    resource:     "@CustomInvoiceBundle/Controller/Api/Rest/InvoiceSubCategoryController.php"
+    type:         rest

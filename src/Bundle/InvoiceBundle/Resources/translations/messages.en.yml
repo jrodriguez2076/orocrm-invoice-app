@@ -2,11 +2,23 @@ oro:
     invoice:
         tab: Invoice
         files: Invoice Files
+        categories: Categories
+        subcategories: Subcategories
+        category.label: Category
+        subcategory.label: Subcategory
         uploaded_at.label: Uploaded At
         file.label: File
         file_name.label: File Name
         related_contact.label: Related Contact
         related_account.label: Related Account
+        category:
+            name.label: Category Name
+        subcategory:
+            name.label: Sub Category Name
+            category.label: Group Category
+        file:
+            category.label: Category
+        select_option.label: Select option
 
 custom:
     invoice:
