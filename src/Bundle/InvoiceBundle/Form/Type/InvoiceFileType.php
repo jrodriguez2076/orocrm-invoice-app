@@ -6,8 +6,8 @@ namespace Custom\Bundle\InvoiceBundle\Form\Type;
 
 use Custom\Bundle\InvoiceBundle\Entity\InvoiceFile;
 use Custom\Bundle\InvoiceBundle\Form\DataTransformer\idToCategoryTransformer;
+use Oro\Bundle\AccountBundle\Form\Type\AccountSelectType;
 use Oro\Bundle\AttachmentBundle\Form\Type\FileType;
-use Oro\Bundle\ContactBundle\Form\Type\ContactSelectType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -43,17 +43,14 @@ class InvoiceFileType extends AbstractType
                 ]
             )
             ->add(
-                'relatedContact',
-                ContactSelectType::class,
+                'relatedAccount',
+                AccountSelectType::class,
                 [
                     'required'               => true,
-                    'label'                  => 'oro.invoice.related_contact.label',
-                    'new_item_property_name' => 'firstName',
+                    'label'                  => 'oro.invoice.related_account.label',
                     'configs'                => [
-                        'renderedPropertyName'    => 'fullName',
-                        'placeholder'             => 'oro.contact.form.choose_contact',
-                        'result_template_twig'    => 'OroFormBundle:Autocomplete:fullName/result.html.twig',
-                        'selection_template_twig' => 'OroFormBundle:Autocomplete:fullName/selection.html.twig'
+                        'renderedPropertyName'    => 'name',
+                        'placeholder'             => 'oro.account.form.choose_account',
                     ]
                 ]
             );

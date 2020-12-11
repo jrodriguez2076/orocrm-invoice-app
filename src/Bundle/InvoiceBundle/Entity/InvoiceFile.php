@@ -9,7 +9,6 @@ use Doctrine\ORM\Mapping as ORM;
 use JMS\Serializer\Annotation as JMS;
 use Oro\Bundle\AccountBundle\Entity\Account;
 use Oro\Bundle\AttachmentBundle\Entity\File;
-use Oro\Bundle\ContactBundle\Entity\Contact;
 use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\Config;
 use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\ConfigField;
 
@@ -71,14 +70,6 @@ class InvoiceFile
     protected $relatedAccount;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Oro\Bundle\ContactBundle\Entity\Contact")
-     * @ORM\JoinColumn(name="relatedContact_id", referencedColumnName="id", onDelete="SET NULL")
-     *
-     * @var Contact
-     */
-    public $relatedContact;
-
-    /**
      * @var \DateTime
      *
      * @ORM\Column(type="datetime")
@@ -120,16 +111,6 @@ class InvoiceFile
     public function setRelatedAccount(Account $relatedAccount): void
     {
         $this->relatedAccount = $relatedAccount;
-    }
-
-    public function getRelatedContact(): ?Contact
-    {
-        return $this->relatedContact;
-    }
-
-    public function setRelatedContact(Contact $contact): void
-    {
-        $this->relatedContact = $contact;
     }
 
     /**

@@ -44,6 +44,11 @@ class InvoiceCategory
      */
     public $name;
 
+    /**
+     * @ORM\Column(type="boolean")
+     */
+    public $invoiceFormEnabled = false;
+
     public function getId()
     {
         return $this->id;
@@ -62,5 +67,15 @@ class InvoiceCategory
     public function setName(string $name): void
     {
         $this->name = $name;
+    }
+
+    public function isInvoiceFormEnabled(): bool
+    {
+        return (bool) $this->invoiceFormEnabled;
+    }
+
+    public function setInvoiceFormEnabled(?bool $invoiceFormEnabled): void
+    {
+        $this->invoiceFormEnabled = $invoiceFormEnabled;
     }
 }

@@ -9,10 +9,10 @@ oro:
         uploaded_at.label: Uploaded At
         file.label: File
         file_name.label: File Name
-        related_contact.label: Related Contact
         related_account.label: Related Account
         category:
             name.label: Category Name
+            invoice_form_enabled.label: Invoice Form Enableed
         subcategory:
             name.label: Sub Category Name
             category.label: Group Category

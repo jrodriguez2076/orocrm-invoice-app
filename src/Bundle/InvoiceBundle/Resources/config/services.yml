@@ -75,14 +75,6 @@ services:
             - 'invoice_file'
             - Custom\Bundle\InvoiceBundle\Form\Type\InvoiceFileApiType
 
-    invoice.auto_assignment.listener:
-        public: true
-        class: Custom\Bundle\InvoiceBundle\Listener\AutoAssignment
-        tags:
-            - { name: doctrine.event_subscriber, connection: default }
-        arguments:
-            - "@service_container"
-
     invoice.provider.categories:
         public: true
         class: Custom\Bundle\InvoiceBundle\Entity\Repository\InvoiceCategory

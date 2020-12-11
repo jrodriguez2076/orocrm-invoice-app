@@ -11,6 +11,7 @@ use FOS\RestBundle\Controller\Annotations as Rest;
 use FOS\RestBundle\Controller\Annotations\RouteResource;
 use FOS\RestBundle\Routing\ClassResourceInterface;
 use Nelmio\ApiDocBundle\Annotation\ApiDoc;
+use Oro\Bundle\AccountBundle\Entity\Account;
 use Oro\Bundle\AttachmentBundle\Entity\File;
 use Oro\Bundle\ContactBundle\Entity\Contact;
 use Oro\Bundle\SecurityBundle\Annotation\AclAncestor;
@@ -34,12 +35,12 @@ class InvoiceFileController extends RestController implements ClassResourceInter
     public function postAction(Request $request)
     {
         $entityManager = $this->get('doctrine.orm.entity_manager');
-        $relatedContactId = $request->get('file')['relatedContact'];
-        $relatedContact = $entityManager->getRepository(Contact::class)->findOneBy(['id' => $relatedContactId]);
+        $relatedAccountId = $request->get('file')['relatedAccount'];
+        $relatedAccount = $entityManager->getRepository(Account::class)->findOneBy(['id' => $relatedAccountId]);
         $categoryId = $request->get('file')['category'];
         $category = $entityManager->getRepository(InvoiceSubCategory::class)->findOneBy(['id' => $categoryId]);
         $invoiceFileEntity = new InvoiceFile();
-        $invoiceFileEntity->setRelatedContact($relatedContact);
+        $invoiceFileEntity->setRelatedAccount($relatedAccount);
         $invoiceFileEntity->setCategory($category);
         $invoiceFileEntity->setUploadedAt(new DateTime());
 
@@ -53,8 +54,6 @@ class InvoiceFileController extends RestController implements ClassResourceInter
         $entityManager->persist($newFile);
 
         $invoiceFileEntity->setFile($newFile);
-
-        $this->get('invoice.auto_assignment.listener')->assignAccountByContact($invoiceFileEntity);
 
         $entityManager->persist($invoiceFileEntity);
         $entityManager->flush();

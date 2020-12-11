@@ -37,6 +37,8 @@ FROM
 	`invoice_subcategories` `sc`
 LEFT JOIN 
 	`invoice_categories` `c` ON `c`.`id` = `sc`.`category_id`
+WHERE
+    `c`.`invoiceFormEnabled` = 1
 ORDER BY
     `c`.`name` DESC
 SQL;

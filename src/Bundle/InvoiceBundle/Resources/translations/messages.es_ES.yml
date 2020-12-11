@@ -1,3 +1,5 @@
+'Yes': Sí
+
 oro:
     invoice:
         tab: Documentos
@@ -9,10 +11,10 @@ oro:
         uploaded_at.label: Subido El
         file.label: Archivo
         file_name.label: Nombre de Archivo
-        related_contact.label: Contacto Relacionado
         related_account.label: Cuenta Relacionada
         category:
             name.label: Nombre
+            invoice_form_enabled.label: Habilitar para formulario de documentos
         subcategory:
             name.label: Nombre
             category.label: Categoria Asociada

@@ -1,8 +1,0 @@
-{% set contactId = record.getValue('contactId') %}
-{% if is_granted('oro_contact_view') and contactId %}
-    <a href="{{ path('oro_contact_view', {id: contactId}) }}">
-        {{ value }}
-    </a>
-{% else %}
-    {{ value }}
-{% endif %}

@@ -27,7 +27,7 @@
         'entity': entity,
         'indexPath': path('invoice_file_index'),
         'indexLabel': 'oro.invoice.files'|trans,
-        'entityTitle': UI.entityViewLink(entity.relatedContact, entity.relatedContact|oro_format_name, 'oro_contact_view')
+        'entityTitle': UI.entityViewLink(entity.relatedAccount.name, entity.relatedAccount|oro_format_name, 'oro_account_view')
     } %}
     {{ parent() }}
 {% endblock pageHeader %}
@@ -38,7 +38,10 @@
     {%- set invoiceFileInformation -%}
         <div class="row-fluid form-horizontal">
             <div class="responsive-block">
-                {{ UI.renderHtmlProperty('oro.invoice.category.label'|trans, entity.category.name) }}
+                {%- set category -%}
+                    {{ entity.category.category.name ~ ' / ' ~ entity.category.name }}
+                {%- endset -%}
+                {{ UI.renderHtmlProperty('oro.invoice.category.label'|trans, category) }}
                 {%- set relatedAccount -%}
                     {%- if entity.relatedAccount -%}
                         {% if is_granted('oro_account_view') %}
@@ -52,10 +55,6 @@
                 {%- endset -%}
                 {{ UI.renderHtmlProperty('oro.case.caseentity.related_account.label'|trans, relatedAccount) }}
                 {{ UI.renderHtmlProperty('oro.invoice.file.label'|trans, oro_file_view(entity.file)) }}
-                {{ UI.renderHtmlProperty(
-                    'oro.invoice.related_contact.label'|trans,
-                    UI.entityViewLink(entity.relatedContact, entity.relatedContact|oro_format_name, 'oro_contact_view')
-                ) }}
                 {% if entity.uploadedAt is not empty %}
                     {{ UI.renderProperty('oro.invoice.uploaded_at.label'|trans, entity.uploadedAt|oro_format_datetime) }}
                 {% endif %}

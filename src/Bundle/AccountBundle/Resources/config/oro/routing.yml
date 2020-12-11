@@ -1,0 +1,14 @@
+custom_account_api:
+    resource: "@CustomAccountBundle/Controller/Api/Rest/InvoiceFormController.php"
+    type: rest
+    prefix: api/rest/{version}/
+    requirements:
+        version: latest|v1
+        _format: json
+    defaults:
+        version: latest
+
+custom_account_bundle:
+    resource: "@CustomAccountBundle/Controller"
+    type: annotation
+    prefix: /contact

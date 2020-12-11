@@ -8,8 +8,6 @@ datagrids:
                     - invoiceFile.id
                     - file.originalFilename as fileName
                     - relatedAccount.name as relatedAccountName
-                    - CONCAT_WS(' ', contact.firstName, contact.lastName) as contactName
-                    - contact.id as contactId
                     - category.name as categoryName
                     - parentCategory.name as parentCategoryName
                     - invoiceFile.uploadedAt as uploadedAt
@@ -18,7 +16,6 @@ datagrids:
                 join:
                     left:
                         - { join: invoiceFile.relatedAccount, alias: relatedAccount }
-                        - { join: invoiceFile.relatedContact, alias: contact }
                         - { join: invoiceFile.file, alias: file }
                         - { join: invoiceFile.category, alias: category }
                         - { join: category.category, alias: parentCategory }
@@ -31,11 +28,6 @@ datagrids:
                 label: oro.invoice.subcategory.label
             relatedAccountName:
                 label: oro.invoice.related_account.label
-            contactName:
-                type: twig
-                label: oro.invoice.related_contact.label
-                frontend_type: html
-                template: CustomInvoiceBundle:InvoiceFile:Datagrid/Property/contact.html.twig
             uploadedAt:
                 inline_editing:
                     enable: false
@@ -49,10 +41,10 @@ datagrids:
                     data_name: categoryName
                 parentCategoryName:
                     data_name: parentCategoryName
-                contactName:
-                    data_name: contactName
                 uploadedAt:
                     data_name: invoiceFile.uploadedAt
+            default:
+                uploadedAt: DESC
         filters:
             columns:
                 fileName:
@@ -67,9 +59,6 @@ datagrids:
                 relatedAccountName:
                     type: string
                     data_name: relatedAccountName
-                contactName:
-                    type: string
-                    data_name: contactName
                 uploadedAt:
                     type: datetime
                     data_name: invoiceFile.uploadedAt
@@ -184,20 +173,35 @@ datagrids:
                 select:
                     - invoiceCategory.id
                     - invoiceCategory.name as invoiceCategoryName
+                    - invoiceCategory.invoiceFormEnabled as invoiceFormEnabled
                 from:
                     - { table: 'Custom\Bundle\InvoiceBundle\Entity\InvoiceCategory', alias: invoiceCategory }
         columns:
             invoiceCategoryName:
                 label: oro.invoice.category.name.label
+            invoiceFormEnabled:
+                label: oro.invoice.category.invoice_form_enabled.label
         sorters:
             columns:
                 invoiceCategoryName:
                     data_name: invoiceCategoryName
+                invoiceFormEnabled:
+                    data_name: invoiceFormEnabled
         filters:
             columns:
                 invoiceCategoryName:
                     type: string
                     data_name: invoiceCategoryName
+                invoiceFormEnabled:
+                    type: choice
+                    data_name: invoiceFormEnabled
+                    options:
+                        field_options:
+                            multiple: true
+                            choices:
+                                'True': 1
+                                'False': 0
+                    translatable_options: true
         properties:
             id: ~
             view_link:

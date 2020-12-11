@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Custom\Bundle\InvoiceBundle\Form\Type;
 
 use Custom\Bundle\InvoiceBundle\Entity\InvoiceCategory;
+use Oro\Bundle\FormBundle\Form\Type\CheckboxType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -23,6 +24,15 @@ class InvoiceCategoryType extends AbstractType
                     'required' => true,
                     'label' => 'oro.invoice.category.name.label',
                     'constraints' => new NotBlank(),
+                ]
+            )
+            ->add(
+                'invoiceFormEnabled',
+                CheckboxType::class,
+                [
+                    'label' => 'oro.invoice.category.invoice_form_enabled.label',
+                    'required' => false,
+                    'is_dynamic_field' => true,
                 ]
             );
     }
